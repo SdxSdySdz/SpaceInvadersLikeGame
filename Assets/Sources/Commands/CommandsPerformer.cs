@@ -1,9 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 
-public class CommandPerformer : MonoBehaviour
+public class CommandsPerformer : MonoBehaviour
 {
     [SerializeField] private List<MovingCommand> _commands;
 
@@ -11,7 +10,7 @@ public class CommandPerformer : MonoBehaviour
 
     private void Start()
     {
-        _currentCommandIndex = 0;
+        _currentCommandIndex = _commands.Count - 1;
         OnCommandFinished();
     }
 

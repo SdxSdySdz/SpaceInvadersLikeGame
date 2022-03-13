@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Mover : MonoBehaviour
 {
-    [SerializeField] private float _speed;
+    [SerializeField] private float _speed = 1;
 
     private Rigidbody2D _rigidbody;
 
@@ -21,7 +21,7 @@ public class Mover : MonoBehaviour
 
     public void Move(Vector2 direction)
     {
-        Vector2 offset = direction.normalized * _speed * Time.deltaTime;
+        Vector2 offset = direction.normalized * (_speed * Time.deltaTime);
         _rigidbody.MovePosition(_rigidbody.position + offset);
     }
 }

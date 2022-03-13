@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Mover))]
@@ -32,5 +30,15 @@ public class PlayerShip : Ship
             Shoot();
 
         _mover.Move(moveDirection);
+    }
+
+    protected override void OnTakeDamage()
+    {
+        
+    }
+
+    protected override void OnDie()
+    {
+
     }
 }
