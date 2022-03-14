@@ -1,8 +1,7 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Timer))]
-public class ShootAI : AI
+public class ShootAI : AI<EnemyArmy>
 {
     [SerializeField] private Vector2 _periodRange;
 
@@ -20,14 +19,19 @@ public class ShootAI : AI
         _timer.TimeIsUp += OnCooldownTimeIsUp;
     }
 
-    public override void OnInit()
+    public override void OnActivated()
     {
         _timer.Run(RandomPeriod);
     }
 
+    public override void OnDeactivated()
+    {
+        _timer.Stop();
+    }
+
     private void OnCooldownTimeIsUp()
     {
-        if (Enemies.TryGetRandomEnemy(out EnemyShip enemy))
+        if (Target.TryGetRandomEnemy(out EnemyShip enemy))
             enemy.Shoot();
 
         _timer.Run(RandomPeriod);

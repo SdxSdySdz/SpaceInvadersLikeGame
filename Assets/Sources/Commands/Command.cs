@@ -5,7 +5,7 @@ public abstract class Command : MonoBehaviour
 {
     public event Action Finished;
 
-    public abstract void Perform();
+    public abstract void Perform(Transform target);
 
     protected void Finish()
     {

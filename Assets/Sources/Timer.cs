@@ -22,7 +22,7 @@ public class Timer : MonoBehaviour
             _time += Time.deltaTime;
         else
         {
-            _period = null;
+            Stop();
             TimeIsUp?.Invoke();
         }
     }
@@ -31,5 +31,11 @@ public class Timer : MonoBehaviour
     {
         _period = period;
         _time = 0;
+    }
+
+    public void Stop()
+    {
+        _period = null;
+        _time = float.NaN;
     }
 }

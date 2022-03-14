@@ -9,25 +9,25 @@ public abstract class MovingCommand : Command
 
     protected abstract Vector2 Offset { get; }
 
-    public override void Perform()
+    public override void Perform(Transform target)
     {
         if (_movingCoroutine != null)
             StopCoroutine(_movingCoroutine);
 
-        _movingCoroutine = StartCoroutine(ApplyMoving());
+        _movingCoroutine = StartCoroutine(ApplyMoving(target));
     }
 
-    private IEnumerator ApplyMoving()
+    private IEnumerator ApplyMoving(Transform target)
     {
         var waitForEndOfFrame = new WaitForEndOfFrame();
 
-        Vector2 startPosition = transform.position;
-        Vector2 endPosition = (Vector2)transform.position + Offset;
+        Vector2 startPosition = target.transform.position;
+        Vector2 endPosition = (Vector2)target.transform.position + Offset;
 
         float time = 0;
         while (time < _duration)
         {
-            transform.position = Vector2.Lerp(startPosition, endPosition, time / _duration);
+            target.transform.position = Vector2.Lerp(startPosition, endPosition, time / _duration);
             time += Time.deltaTime;
             yield return waitForEndOfFrame;
         }

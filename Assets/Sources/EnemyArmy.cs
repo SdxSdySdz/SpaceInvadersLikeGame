@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,6 +9,7 @@ public class EnemyArmy : MonoBehaviour
     [SerializeField] private int _count;
     [SerializeField] private GridPlacer _placer;
     [SerializeField] private ShootAI _shootAI;
+    [SerializeField] private MoveAI _moveAI;
     [SerializeField] private EnemyPool _pool;
 
     private List<EnemyShip> _enemies;
@@ -24,20 +24,8 @@ public class EnemyArmy : MonoBehaviour
 
     private void Awake()
     {
-        
-    }
-
-    private void Start()
-    {
-        Debug.LogError("1");
-        InstantiateAll();
-        Debug.LogError("2");
-        _placer.PlaceAsChilds(Transforms);
-        Debug.LogError("3");
+        _enemies = new List<EnemyShip>();
         _placerStartPosition = _placer.transform.position;
-        Debug.LogError("4");
-        _shootAI.Init(this);
-        Debug.LogError("5");
     }
 
     private void OnEnable()
@@ -56,11 +44,28 @@ public class EnemyArmy : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        // в идеале нужно это делать в Awake,
+        // но _pool мог не успеть проинициализироваться.
+        // возможно нужен zenject?
+        InstantiateAll(); 
+        OnEnable();
+
+        _placer.PlaceAsChilds(Transforms);
+    }
+
     public void Restart()
     {
+        DeactivateAIs();
+
+        Debug.LogError(_placerStartPosition);
+        _placer.transform.position = _placerStartPosition;
+
         DespawnAll();
         SpawnAll();
-        // _placer.transform.position = _placerStartPosition;
+
+        ActivateAIs();
     }
 
     public bool TryGetRandomEnemy(out EnemyShip enemy)
@@ -74,34 +79,30 @@ public class EnemyArmy : MonoBehaviour
             throw new ArgumentOutOfRangeException(nameof(_count));
 
         _enemies = new List<EnemyShip>(_count);
-        Debug.LogError("Lol");
         for (int i = 0; i < _count; i++)
         {
-            Debug.LogError("Poop");
-            Debug.LogError(_pool == null);
-            Debug.LogError("looooooooooooool");
             if (_pool.TryGetObject(out EnemyShip enemy))
             {
-                Debug.LogError("Ahahahah");
                 enemy.Show();
                 _enemies.Add(enemy);
             }
             else
             {
-                Debug.LogError("Opa");
                 throw new ArgumentOutOfRangeException(nameof(_count));
-
             }
         }
-        Debug.LogError("Kek");
     }
 
-    private void SpawnAll()
+    private void OnEnemyDied()
     {
-        foreach (var poolObject in _enemies)
+        AnyDied?.Invoke();
+
+        if (_pool.AnyActivated == false)
         {
-            poolObject.Show();
+            DeactivateAIs();
+            AllDied?.Invoke();
         }
+            
     }
 
     private void DespawnAll()
@@ -112,11 +113,23 @@ public class EnemyArmy : MonoBehaviour
         }
     }
 
-    private void OnEnemyDied()
+    private void SpawnAll()
     {
-        AnyDied?.Invoke();
+        foreach (var poolObject in _enemies)
+        {
+            poolObject.Show();
+        }
+    }
 
-        if (_pool.AnyActivated == false)
-            AllDied?.Invoke();
+    private void DeactivateAIs()
+    {
+        _shootAI.Deactivate();
+        _moveAI.Deactivate();
+    }
+
+    private void ActivateAIs()
+    {
+        _shootAI.Activate(this);
+        _moveAI.Activate(_placer.transform);
     }
 }

@@ -1,14 +1,23 @@
 using UnityEngine;
 
-public abstract class AI : MonoBehaviour
+public abstract class AI<TTarget> : MonoBehaviour
+    where TTarget : class
 {
-    protected EnemyArmy Enemies;
+    protected TTarget Target;
 
-    public void Init(EnemyArmy enemies)
+    public void Activate(TTarget enemies)
     {
-        Enemies = enemies;
-        OnInit();
+        Target = enemies;
+        OnActivated();
     }
 
-    public abstract void OnInit();
+    public void Deactivate()
+    {
+        Target = null;
+        OnDeactivated();
+    }
+
+    public abstract void OnActivated();
+    public abstract void OnDeactivated();
+
 }
