@@ -16,14 +16,14 @@ public class ShipAudio : MonoBehaviour
 
     private void OnEnable()
     {
-        _ship.Shooted.AddListener(OnShipShooted);
-        _ship.Died.AddListener(OnShipDied);
+        _ship.Shooted += OnShipShooted;
+        _ship.Died += OnShipDied;
     }
 
     private void OnDisable()
     {
-        _ship.Shooted.RemoveListener(OnShipShooted);
-        _ship.Died.RemoveListener(OnShipDied);
+        _ship.Shooted -= OnShipShooted;
+        _ship.Died -= OnShipDied;
     }
 
     private void OnShipShooted()

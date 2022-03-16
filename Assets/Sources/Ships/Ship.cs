@@ -16,9 +16,9 @@ public abstract class Ship : MonoBehaviour
 
     private bool IsInitialized => _bulletPool != null;
 
-    public UnityEvent Shooted;
-    public UnityEvent TookDamage;
-    public UnityEvent Died;
+    public event UnityAction Shooted;
+    public event UnityAction TookDamage;
+    public event UnityAction Died;
 
     private void Awake()
     {

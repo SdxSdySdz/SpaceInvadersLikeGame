@@ -6,7 +6,7 @@ public abstract class Bullet<TTarget> : Bullet
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<TTarget>(out TTarget target))
+        if (collision.TryGetComponent(out TTarget target))
         {
             target.TakeDamage();
             Hide();

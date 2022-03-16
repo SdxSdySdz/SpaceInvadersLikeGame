@@ -35,7 +35,7 @@ public class EnemyArmy : MonoBehaviour
     {
         foreach (var enemy in _enemies)
         {
-            enemy.Died.AddListener(OnEnemyDied);
+            enemy.Died += OnEnemyDied;
         }
     }
 
@@ -43,7 +43,7 @@ public class EnemyArmy : MonoBehaviour
     {
         foreach (var enemy in _enemies)
         {
-            enemy.Died.RemoveListener(OnEnemyDied);
+            enemy.Died -= OnEnemyDied;
         }
     }
 
@@ -60,11 +60,13 @@ public class EnemyArmy : MonoBehaviour
 
     public void Restart()
     {
-        DeactivateAIs();
-
         _placer.transform.position = _placerStartPosition;
 
+        DeactivateAIs();
+
         DespawnAll();
+        _bulletPool.HideAll();
+
         SpawnAll();
 
         ActivateAIs();

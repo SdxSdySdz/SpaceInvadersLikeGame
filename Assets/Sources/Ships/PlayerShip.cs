@@ -39,6 +39,6 @@ public class PlayerShip : Ship
 
     protected override void OnDie()
     {
-
+        
     }
 }
