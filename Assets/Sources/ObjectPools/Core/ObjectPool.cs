@@ -5,13 +5,16 @@ using UnityEngine;
 public abstract class ObjectPool<TObject> : MonoBehaviour
     where TObject : MonoBehaviour, IPoolable
 {
+    [SerializeField] private Transform _spawnPoint;
+
     [SerializeField] protected TObject Prefab;
     [SerializeField] protected int Capacity;
 
     private List<TObject> _pool;
 
     private int ActiveCount => ActiveObjects.Count();
-    private IEnumerable<TObject> ActiveObjects => _pool.Where(poolObject => poolObject.IsActive);
+
+    protected IEnumerable<TObject> ActiveObjects => _pool.Where(poolObject => poolObject.IsActive);
 
     public bool AnyActivated => _pool.Any(poolObject => poolObject.IsActive);
 
@@ -39,7 +42,7 @@ public abstract class ObjectPool<TObject> : MonoBehaviour
         _pool = new List<TObject>();
         for (int i = 0; i < Capacity; i++)
         {
-            TObject obj = Instantiate(Prefab);
+            TObject obj = Instantiate(Prefab, _spawnPoint.position, Quaternion.identity);
             obj.Hide();
 
             _pool.Add(obj);
