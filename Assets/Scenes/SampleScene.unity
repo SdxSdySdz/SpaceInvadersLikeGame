@@ -499,7 +499,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3409087127410787636, guid: 7ae9dbdc71921e64598730cd9d7cdc65, type: 3}
       propertyPath: _speed
-      value: 1
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 3409087127410787643, guid: 7ae9dbdc71921e64598730cd9d7cdc65, type: 3}
       propertyPath: m_RootOrder
@@ -1344,7 +1344,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _duration: 1
-  _distance: 1
+  _distance: 0.5
 --- !u!114 &2102910804
 MonoBehaviour:
   m_ObjectHideFlags: 0
