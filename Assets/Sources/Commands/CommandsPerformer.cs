@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,33 +6,26 @@ public class CommandsPerformer : MonoBehaviour
 {
     [SerializeField] private List<MovingCommand> _commands;
 
-    private Transform _target;
-    private int _commandIndex;
+    private Coroutine _processCoroutine;
 
     public void Perform(Transform target)
     {
-        _target = target;
-        _commandIndex = _commands.Count - 1;
-        OnCommandFinished();
+        Stop();
+
+        _processCoroutine = StartCoroutine(PerfomProcesses(target));
     }
 
     public void Stop()
     {
-        _target = null;
+        if (_processCoroutine != null)
+            StopCoroutine(_processCoroutine);
     }
 
-    private void OnCommandFinished()
+    private IEnumerator PerfomProcesses(Transform target)
     {
-        MovingCommand command = _commands[_commandIndex];
-        command.Finished -= OnCommandFinished;
-
-        if (_target == null)
-            return;
-
-        _commandIndex = (_commandIndex + 1) % _commands.Count;
-        command = _commands[_commandIndex];
-
-        command.Finished += OnCommandFinished;
-        command.Perform(_target);
+        for (int i = 0; i < _commands.Count; i = (i + 1) % _commands.Count)
+        {
+            yield return _commands[i].Process(target);
+        }
     }
 }

@@ -5,19 +5,9 @@ public abstract class MovingCommand : Command
 {
     [SerializeField] private float _duration;
 
-    private Coroutine _movingCoroutine;
-
     protected abstract Vector2 Offset { get; }
 
-    public override void Perform(Transform target)
-    {
-        if (_movingCoroutine != null)
-            StopCoroutine(_movingCoroutine);
-
-        _movingCoroutine = StartCoroutine(ApplyMoving(target));
-    }
-
-    private IEnumerator ApplyMoving(Transform target)
+    public IEnumerator Process(Transform target)
     {
         var waitForEndOfFrame = new WaitForEndOfFrame();
 
