@@ -8,10 +8,13 @@ using UnityEngine.Events;
 public abstract class Ship : MonoBehaviour
 {
     [SerializeField] private Vector2 _shootDirection;
-    [SerializeField] private Bullet _bulletPrefab;
+
+    private BulletPool _bulletPool;
 
     protected SpriteRenderer Renderer;
     protected CapsuleCollider2D Collider;
+
+    private bool IsInitialized => _bulletPool != null;
 
     public UnityEvent Shooted;
     public UnityEvent TookDamage;
@@ -28,6 +31,11 @@ public abstract class Ship : MonoBehaviour
         Collider.isTrigger = true;
     }
 
+    public void Init(BulletPool bulletPool)
+    {
+        _bulletPool = bulletPool;
+    }
+
     public void TakeDamage()
     {
         OnTakeDamage();
@@ -42,11 +50,17 @@ public abstract class Ship : MonoBehaviour
 
     public void Shoot()
     {
-        Bullet bullet = Instantiate(_bulletPrefab);
+        if (IsInitialized == false)
+            throw new Exception("Impossible to shoot. Bullet pool is not stated");
+
+        if (_bulletPool.TryGetObject(out Bullet bullet) == false)
+            throw new Exception("Impossible to spawn bullet");
+
+        bullet.Show();
         bullet.transform.position = transform.position;
         bullet.Init(_shootDirection);
 
-        Shooted?.Invoke();
+        Shooted?.Invoke();     
     }
 
     protected abstract void OnTakeDamage();
