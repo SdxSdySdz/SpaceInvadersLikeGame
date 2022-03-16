@@ -31,6 +31,7 @@ public class Level : MonoBehaviour
         PreparePlayer();
         PrepareEnemies();
         _score.Reset();
+        _playerBulletPool.HideAll();
     }
 
     private void PreparePlayer()

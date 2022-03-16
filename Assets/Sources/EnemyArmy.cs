@@ -102,6 +102,7 @@ public class EnemyArmy : MonoBehaviour
 
         if (_enemyPool.AnyActivated == false)
         {
+            _bulletPool.HideAll();
             DeactivateAIs();
             AllDied?.Invoke();
         }

@@ -37,6 +37,14 @@ public abstract class ObjectPool<TObject> : MonoBehaviour
         return obj != null;
     }
 
+    public void HideAll()
+    {
+        foreach (var poolObject in _pool)
+        {
+            poolObject.Hide();
+        }
+    }
+
     private void SpawnObjects()
     {
         _pool = new List<TObject>();
