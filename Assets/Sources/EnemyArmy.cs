@@ -10,7 +10,10 @@ public class EnemyArmy : MonoBehaviour
     [SerializeField] private GridPlacer _placer;
     [SerializeField] private ShootAI _shootAI;
     [SerializeField] private MoveAI _moveAI;
-    [SerializeField] private EnemyPool _pool;
+
+    [Header("Pools")]
+    [SerializeField] private EnemyPool _enemyPool;
+    [SerializeField] private BulletPool _bulletPool;
 
     private List<EnemyShip> _enemies;
     private Vector3 _placerStartPosition;
@@ -59,7 +62,6 @@ public class EnemyArmy : MonoBehaviour
     {
         DeactivateAIs();
 
-        Debug.LogError(_placerStartPosition);
         _placer.transform.position = _placerStartPosition;
 
         DespawnAll();
@@ -70,7 +72,7 @@ public class EnemyArmy : MonoBehaviour
 
     public bool TryGetRandomEnemy(out EnemyShip enemy)
     {
-        return _pool.TryGetRandomActiveObject(out enemy);
+        return _enemyPool.TryGetRandomActiveObject(out enemy);
     }
 
     private void InstantiateAll()
@@ -81,9 +83,10 @@ public class EnemyArmy : MonoBehaviour
         _enemies = new List<EnemyShip>(_count);
         for (int i = 0; i < _count; i++)
         {
-            if (_pool.TryGetObject(out EnemyShip enemy))
+            if (_enemyPool.TryGetObject(out EnemyShip enemy))
             {
                 enemy.Show();
+                enemy.Init(_bulletPool);
                 _enemies.Add(enemy);
             }
             else
@@ -97,7 +100,7 @@ public class EnemyArmy : MonoBehaviour
     {
         AnyDied?.Invoke();
 
-        if (_pool.AnyActivated == false)
+        if (_enemyPool.AnyActivated == false)
         {
             DeactivateAIs();
             AllDied?.Invoke();

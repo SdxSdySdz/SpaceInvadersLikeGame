@@ -4,11 +4,10 @@ public class Level : MonoBehaviour
 {
     [SerializeField] private PlayerShip _playerShip;
     [SerializeField] private EnemyArmy _enemies;
+    [SerializeField] private BulletPool _playerBulletPool;
 
-    private void Start()
-    {
-        Restart();
-    }
+    [Header("UI")]
+    [SerializeField] private Score _score;
 
     private void OnEnable()
     {
@@ -22,14 +21,21 @@ public class Level : MonoBehaviour
         _enemies.AllDied -= OnAllEnemyDied;
     }
 
+    private void Start()
+    {
+        Restart();
+    }
+
     public void Restart()
     {
         PreparePlayer();
         PrepareEnemies();
+        _score.Reset();
     }
 
     private void PreparePlayer()
     {
+        _playerShip.Init(_playerBulletPool);
         _playerShip.transform.position = new Vector3(0, -4, 0);
     }
 
@@ -40,7 +46,7 @@ public class Level : MonoBehaviour
 
     private void OnEnemyDied()
     {
-
+        _score.Increment();
     }
 
     private void OnAllEnemyDied()

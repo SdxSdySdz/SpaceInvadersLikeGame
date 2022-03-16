@@ -21,7 +21,7 @@ public class Mover : MonoBehaviour
 
     public void Move(Vector2 direction)
     {
-        Vector2 offset = direction.normalized * (_speed * Time.deltaTime);
-        _rigidbody.MovePosition(_rigidbody.position + offset);
+        Vector2 offset = direction.normalized * (_speed * Time.fixedDeltaTime);
+            _rigidbody.MovePosition(_rigidbody.position + offset);
     }
 }
