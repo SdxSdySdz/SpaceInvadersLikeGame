@@ -2,7 +2,10 @@ using UnityEngine;
 
 public class EnemyShip : Ship, IPoolable
 {
-    public bool IsActive => enabled || Renderer.enabled || Collider.enabled;
+    [SerializeField] private SpriteRenderer _renderer;
+    [SerializeField] private GameObject _deathEffect;
+    
+    public bool IsActive => enabled || _renderer.enabled || Collider.enabled;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -15,14 +18,14 @@ public class EnemyShip : Ship, IPoolable
     public void Show()
     {
         enabled = true;
-        Renderer.enabled = true;
+        _renderer.enabled = true;
         Collider.enabled = true;
     }
 
     public void Hide()
     {
         enabled = false;
-        Renderer.enabled = false;
+        _renderer.enabled = false;
         Collider.enabled = false;
     }
 
@@ -34,5 +37,11 @@ public class EnemyShip : Ship, IPoolable
     protected override void OnDie()
     {
         Hide();
+        PlayDeathEffect();
+    }
+
+    private void PlayDeathEffect()
+    {
+        Instantiate(_deathEffect, transform.position, Quaternion.identity);
     }
 }

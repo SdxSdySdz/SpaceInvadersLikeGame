@@ -2,16 +2,15 @@ using System;
 using UnityEngine;
 using UnityEngine.Events;
 
-[RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(CapsuleCollider2D))]
 [RequireComponent(typeof(ShipAudio))]
 public abstract class Ship : MonoBehaviour
 {
     [SerializeField] private Vector2 _shootDirection;
 
+
     private BulletPool _bulletPool;
 
-    protected SpriteRenderer Renderer;
     protected CapsuleCollider2D Collider;
 
     private bool IsInitialized => _bulletPool != null;
@@ -24,8 +23,6 @@ public abstract class Ship : MonoBehaviour
     {
         if (_shootDirection == Vector2.zero)
             throw new ArgumentException(nameof(_shootDirection));
-
-        Renderer = GetComponent<SpriteRenderer>();
 
         Collider = GetComponent<CapsuleCollider2D>();
         Collider.isTrigger = true;

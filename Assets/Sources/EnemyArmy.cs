@@ -49,9 +49,6 @@ public class EnemyArmy : MonoBehaviour
 
     private void Start()
     {
-        // в идеале нужно это делать в Awake,
-        // но _pool мог не успеть проинициализироваться.
-        // возможно нужен zenject?
         InstantiateAll(); 
         OnEnable();
 
@@ -93,6 +90,8 @@ public class EnemyArmy : MonoBehaviour
             }
             else
             {
+                Debug.LogError(_enemies.Capacity);
+                Debug.LogError(_enemies.Count);
                 throw new ArgumentOutOfRangeException(nameof(_count));
             }
         }
